@@ -5,7 +5,9 @@ import { useStore } from "@/store";
 import { useRouter } from "vue-router";
 
 export function useLoginForm() {
-  const { handleSubmit, isSubmitting, submitCount } = useForm();
+  const { handleSubmit, isSubmitting, submitCount } = useForm<{
+    email: string;
+  }>();
   const store = useStore();
   const router = useRouter();
 
@@ -39,7 +41,9 @@ export function useLoginForm() {
   // eslint-disable-next-line no-unused-vars
   const onSubmit = handleSubmit(async (values) => {
     try {
-      await store.dispatch("auth/login", values);
+      // await store.dispatch("auth/login", values);
+      console.log(values);
+      // await loginUserByEmail()
       router.push("/");
       // eslint-disable-next-line no-empty
     } catch (e) {}

@@ -23,11 +23,11 @@ export default defineComponent({
 
     return {
       logout: () => {
-        store.commit("auth/logout");
+        store.dispatch("auth_logOut", null);
         router.push("/auth");
       },
       openSidebar: () => {
-        store.commit("openSidebar");
+        store.commit("sidebar_openSidebar", null);
       },
     };
   },

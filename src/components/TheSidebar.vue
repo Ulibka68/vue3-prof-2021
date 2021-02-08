@@ -23,7 +23,7 @@ export default defineComponent({
 
     return {
       sidebar,
-      close: () => store.commit("closeSidebar"),
+      close: () => store.commit("sidebar_closeSidebar", null),
     };
   },
 });

@@ -5,12 +5,10 @@
     <template #header>
       <button class="btn primary" @click="modal = true">Создать</button>
     </template>
-    <RequestFilter v-model="filter" />
-    <RequestTable :request="requests" />
 
     <teleport to="body">
       <AppModal v-if="modal" title="Создать заявку" @close="modal = false">
-        <RequestModal @created="modal = false" />
+        <h1>Диалоговое окно</h1>
       </AppModal>
     </teleport>
   </AppPage>

@@ -1,31 +1,18 @@
 import {
-  createLogger,
   createStore,
-  Store,
-  useStore as baseUseStore,
+  Store as VuexStore,
+  CommitOptions,
+  DispatchOptions,
+  createLogger,
 } from "vuex";
-import { InjectionKey } from "vue";
 
-export type tMessage = { value: string; type: string };
+import { initialState } from "./initialState";
 
-export const statusArr = ["done", "canceled", "active", "pending"] as const;
-export type tStatus = typeof statusArr[number];
+import * as moduleCounter from "./modules/counter";
+import * as moduleAuth from "./modules/auth";
+import * as moduleCommon from "./modules/common";
 
-// define your typings for the store state
-export interface tRootState {
-  message: tMessage | null;
-  sidebar: boolean;
-}
-
-/* eslint-disable */
-export interface tOneRequest {
-  fio: string;
-  phone: string;
-  amount: number;
-  status: tStatus;
-  id: any;
-}
-/* eslint-enable */
+export type State = typeof initialState;
 
 const plugins = [];
 if (process.env.NODE_ENV === "development") {
@@ -33,15 +20,56 @@ if (process.env.NODE_ENV === "development") {
 }
 
 export const store = createStore({
-  state: {},
-  mutations: {},
-  actions: {},
-  modules: {},
+  state: initialState,
+  mutations: {
+    ...moduleCounter.mutations,
+    ...moduleAuth.mutations,
+    ...moduleCommon.mutations,
+  },
+  getters: { ...moduleCounter.getters, ...moduleAuth.getters },
+  actions: {
+    ...moduleCounter.actions,
+    ...moduleAuth.actions,
+    ...moduleCommon.actions,
+  },
+  plugins,
 });
 
-// define injection key
-export const key: InjectionKey<Store<tRootState>> = Symbol();
+type MutationPayload = moduleCounter.MutationPayload &
+  moduleAuth.MutationPayload &
+  moduleCommon.MutationPayload;
 
-export function useStore(): Store<tRootState> {
-  return baseUseStore(key);
+type ActionsPayload = moduleCounter.ActionsPayload &
+  moduleAuth.ActionsPayload &
+  moduleCommon.ActionsPayload;
+
+type Getters = moduleCounter.Getters & moduleAuth.Getters;
+
+/*
+  ---------------------- no change code ----------------------
+*/
+
+export type Store = Omit<
+  VuexStore<State>,
+  "getters" | "commit" | "dispatch"
+> & {
+  commit<K extends keyof MutationPayload>(
+    key: K,
+    payload: MutationPayload[K],
+    options?: CommitOptions
+  ): void;
+} & {
+  dispatch<K extends keyof ActionsPayload>(
+    key: K,
+    payload: ActionsPayload[K][0],
+    options?: DispatchOptions
+  ): ActionsPayload[K][1];
+} & {
+  getters: {
+    [K in keyof Getters]: ReturnType<Getters[K]>;
+  };
+};
+
+export function useStore(): Store {
+  return store as Store;
 }

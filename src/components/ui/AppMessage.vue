@@ -1,5 +1,5 @@
 <template>
-  <div v-if="message" :class="['alert', message.type]">
+  <div v-if="message.value" :class="['alert', message.type]">
     <p class="alert-title" v-if="title">{{ title }}</p>
     <p>
       {{ message.value }}
@@ -10,13 +10,16 @@
 
 <script lang="ts">
 import { computed, defineComponent, Ref } from "vue";
-import { useStore, tMessage } from "@/store";
+import { useStore } from "@/store";
+import { initialState } from "@/store/initialState";
 
 export default defineComponent({
   name: "AppMessage",
   setup() {
     const store = useStore();
-    const message: Ref<tMessage | null> = computed(() => store.state.message);
+    const message: Ref<typeof initialState.message | null> = computed(
+      () => store.state.message
+    );
 
     // eslint-disable-next-line no-unused-vars
     const TITLE_MAP = {
@@ -33,7 +36,7 @@ export default defineComponent({
       message,
       title,
       close: () => {
-        store.commit("clearMessage", null, { root: true });
+        store.commit("message_clearMessage", null);
       },
     };
   },
