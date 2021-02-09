@@ -3,6 +3,7 @@ import * as yup from "yup";
 import { computed, ComputedRef, Ref, watch, WritableComputedRef } from "vue";
 import { useStore } from "@/store";
 import { useRouter } from "vue-router";
+import { loginUserByEmail } from "@/utils/firebase/FBCustAuth";
 
 type SubmitEvent = Event & {
   target: HTMLFormElement;
@@ -23,6 +24,7 @@ export function useLoginForm(): {
 } {
   const { handleSubmit, isSubmitting, submitCount } = useForm<{
     email: string;
+    password: string;
   }>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const store = useStore();
@@ -57,13 +59,16 @@ export function useLoginForm(): {
 
   // eslint-disable-next-line no-unused-vars
   const onSubmit = handleSubmit(async (values) => {
-    try {
-      // await store.dispatch("auth/login", values);
-      console.log(values);
-      // await loginUserByEmail()
+    console.log(values);
+    const loginResult = await loginUserByEmail(values.email, values.password);
+    if (loginResult.result) {
       router.push("/");
-      // eslint-disable-next-line no-empty
-    } catch (e) {}
+    } else {
+      store.dispatch("setMessage", {
+        value: loginResult.errMsg,
+        type: "warning",
+      });
+    }
   });
 
   return {

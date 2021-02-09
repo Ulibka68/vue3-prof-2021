@@ -56,11 +56,13 @@ export async function loginUserByEmail(
 ): Promise<{ result: boolean; errMsg: string }> {
   try {
     CheckModuleLoad();
-
+    console.log("loginUserByEmail : ", email, password);
     const data: UserCredential = await fbAppAuth.signInWithEmailAndPassword(
       email,
       password
     );
+    console.log("loginUserByEmail end ");
+    console.log(data);
 
     if (data.user) {
       return { result: true, errMsg: "" };
@@ -71,6 +73,7 @@ export async function loginUserByEmail(
       };
     }
   } catch (err) {
+    console.log("login filed : ", err.message);
     return {
       result: false,
       errMsg: err.message,
@@ -91,7 +94,7 @@ export function hearFirebaseAuthEvent(): void {
     // eslint-disable-next-line no-unused-vars
     fbAppAuth.onAuthStateChanged((user) => {
       console.log("onAuthStateChanged fired");
-      store.commit("Auth/storeFirebaseCurrentUser");
+      store.commit("auth_storeFirebaseCurrentUser");
       if (user) {
         router.push({ name: "Home" });
       }

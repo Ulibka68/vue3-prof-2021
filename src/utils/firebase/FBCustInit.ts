@@ -30,7 +30,7 @@ import(
     fbAppAuth = ((fbApp as any).auth() as unknown) as FirebaseAuth;
     console.log("Система авторизации инициализирована");
 
-    store.commit("Auth/storeFirebaseCurrentUser");
+    store.commit("auth_storeFirebaseCurrentUser");
     hearFirebaseAuthEvent();
 
     // данная функция вызывается после инициализации auth - Значит пора инициализировать DB

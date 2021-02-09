@@ -1,6 +1,12 @@
+// дополнения к классу alert для AppMessage
 export type MessageType = "warning" | "danger" | "primary";
 
-const msgType: MessageType = "primary";
+// расшифровка заголовка для AppMessage
+export const MESSAGE_TITLE_MAP: Record<MessageType, string> = {
+  primary: "Успешно",
+  danger: "Ошибка",
+  warning: "Предупреждение",
+};
 
 export const initialState = {
   counter: {
@@ -23,6 +29,6 @@ export const initialState = {
   sidebar: false,
   message: {
     value: "",
-    type: msgType as MessageType,
+    type: "primary" as MessageType,
   },
 };

@@ -57,6 +57,9 @@ export const actions: Actions = {
   ): void {
     state.message.type = payload.type;
     state.message.value = payload.value;
+    setTimeout(() => {
+      commit("message_clearMessage", null);
+    }, 4000);
   },
 };
 

@@ -11,7 +11,7 @@
 <script lang="ts">
 import { computed, defineComponent, Ref } from "vue";
 import { useStore } from "@/store";
-import { initialState } from "@/store/initialState";
+import { initialState, MESSAGE_TITLE_MAP } from "@/store/initialState";
 
 export default defineComponent({
   name: "AppMessage",
@@ -21,15 +21,8 @@ export default defineComponent({
       () => store.state.message
     );
 
-    // eslint-disable-next-line no-unused-vars
-    const TITLE_MAP = {
-      primary: "Успешно",
-      danger: "Ошибка",
-      warning: "Предупреждение",
-    };
-
-    const title = computed(<K extends keyof typeof TITLE_MAP>() =>
-      message.value ? TITLE_MAP[message.value.type as K] : null
+    const title = computed(<K extends keyof typeof MESSAGE_TITLE_MAP>() =>
+      message.value ? MESSAGE_TITLE_MAP[message.value.type as K] : null
     );
 
     return {
