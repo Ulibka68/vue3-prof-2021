@@ -1,16 +1,10 @@
 <template>
   <AppLoader v-if="loading" />
   <AppPage v-else title="Список заявок">
-    <h1>Home</h1>
-    <template #header>
-      <button class="btn primary" @click="modal = true">Создать</button>
-    </template>
-
-    <teleport to="body">
-      <AppModal v-if="modal" title="Создать заявку" @close="modal = false">
-        <h1>Диалоговое окно</h1>
-      </AppModal>
-    </teleport>
+    <div class="good-layout-container">
+      <SearchPanel />
+      <ProductTable />
+    </div>
   </AppPage>
 </template>
 
@@ -18,16 +12,21 @@
 /* eslint-disable */
 import { defineComponent, ref, computed, onMounted } from "vue";
 import AppPage from "@/components/ui/AppPage.vue";
-import AppModal from "@/components/ui/AppModal.vue";
+
 import AppLoader from "@/components/ui/AppLoader.vue";
 import { useStore } from "@/store";
+import SearchPanel from "@/components/search-panel/SearchPanel.vue";
+
+import ProductTable from "@/components/products/ProductTable.vue";
 /* eslint-enable */
 
 export default defineComponent({
   name: "Home",
   components: {
+    ProductTable,
+
+    SearchPanel,
     AppPage,
-    AppModal,
     AppLoader,
   },
   setup() {

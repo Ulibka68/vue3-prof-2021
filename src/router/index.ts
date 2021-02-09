@@ -3,7 +3,10 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Home from "@/views/Home.vue";
 import Auth from "@/views/Auth.vue";
 
-export type layoutType = { layout: "main" | "auth"; auth: boolean };
+export type layoutType = {
+  layout: "main-layout" | "auth-layout" | "GoodsListLayout";
+  auth: boolean;
+};
 type tMyRouteRecord = Omit<RouteRecordRaw, "meta"> & { meta: layoutType };
 
 const routesPaths: Array<tMyRouteRecord> = [
@@ -12,7 +15,7 @@ const routesPaths: Array<tMyRouteRecord> = [
     name: "Home",
     component: Home,
     meta: {
-      layout: "main",
+      layout: "main-layout",
       auth: false,
     },
   },
@@ -21,7 +24,7 @@ const routesPaths: Array<tMyRouteRecord> = [
     name: "Auth",
     component: Auth,
     meta: {
-      layout: "auth",
+      layout: "auth-layout",
       auth: false,
     },
   },
@@ -30,7 +33,7 @@ const routesPaths: Array<tMyRouteRecord> = [
     name: "Help",
     component: () => import("../views/Help.vue"),
     meta: {
-      layout: "main",
+      layout: "main-layout",
       auth: true,
     },
   },

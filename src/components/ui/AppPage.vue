@@ -23,7 +23,7 @@ export default defineComponent({
     back: { type: Boolean, default: false },
   },
   setup(props) {
-    document.title = `${props.title} | Клон Банка`;
+    document.title = `${props.title} | Магазин продуктов`;
   },
 });
 </script>
