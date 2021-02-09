@@ -1,14 +1,36 @@
 import { SubmissionHandler, useField, useForm } from "vee-validate";
 import * as yup from "yup";
+import { ComputedRef, Ref, WritableComputedRef } from "vue";
 
-export interface tRequsetFormValues {
+export type tRequsetFormValues = {
   amount: number;
   fio: string;
   phone: string;
   status: string;
-}
+};
 
-export function useRequestForm(fn: SubmissionHandler<tRequsetFormValues>) {
+type SubmitEvent = Event & {
+  target: HTMLFormElement;
+};
+
+type WritableRef<TValue> = Ref<TValue> | WritableComputedRef<TValue>;
+
+export function useRequestForm(
+  fn: SubmissionHandler<tRequsetFormValues>
+): {
+  status: WritableRef<unknown>;
+  isSubmitting: Ref<boolean>;
+  onSubmit: (e?: SubmitEvent) => Promise<void>;
+  fio: WritableRef<unknown>;
+  phone: WritableRef<unknown>;
+  amount: WritableRef<unknown>;
+  fBlur: (e?: Event) => void;
+  fError: ComputedRef<string | undefined>;
+  pError: ComputedRef<string | undefined>;
+  pBlur: (e?: Event) => void;
+  aError: ComputedRef<string | undefined>;
+  aBlur: (e?: Event) => void;
+} {
   const { isSubmitting, handleSubmit } = useForm<tRequsetFormValues>({
     initialValues: { status: "active", amount: 0, fio: "", phone: "" },
   });
@@ -34,7 +56,8 @@ export function useRequestForm(fn: SubmissionHandler<tRequsetFormValues>) {
         handleSubmit(fn);
     };
 
-     */
+   */
+
   const onSubmit = handleSubmit(fn);
 
   return {

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { GetterTree, MutationTree, ActionContext, CommitOptions } from "vuex";
 
 import { initialState, MessageType } from "../initialState";
@@ -14,9 +15,11 @@ export type MutationPayload = {
 
 export const mutations: MutationTree<State> & Mutations = {
   sidebar_openSidebar({ sidebar }) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     sidebar = true;
   },
   sidebar_closeSidebar({ sidebar }) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     sidebar = false;
   },
   message_clearMessage({ message }) {
@@ -48,6 +51,7 @@ export type ActionsPayload = {
 
 export const actions: Actions = {
   setMessage(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     { commit, state },
     payload: { value: string; type: MessageType }
   ): void {

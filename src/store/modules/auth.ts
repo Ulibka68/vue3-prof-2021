@@ -3,11 +3,15 @@ import { GetterTree, MutationTree, ActionContext, CommitOptions } from "vuex";
 import { initialState } from "../initialState";
 import { fbAppAuth } from "@/utils/firebase/FBCustInit";
 import { logout } from "@/utils/firebase/FBCustAuth";
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   addUser,
   fbAppDatabaseTs,
   CheckFirebaseDatabaseLoad,
 } from "@/utils/firebase/FBCustDatabase.js";
+/* eslint-enable */
+
 import { store } from "@/store";
 
 /*
@@ -53,6 +57,7 @@ export const mutations: MutationTree<State> & Mutations = {
   auth_setAuth(state, authState) {
     state.logedUser.isAuth = authState;
   },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   auth_storeFirebaseCurrentUser(state) {
     const user = fbAppAuth.currentUser;
     if (user) {

@@ -37,12 +37,14 @@ export async function registerNewUser(
   );
 
   if (data) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await data!.user!.updateProfile({ displayName: name });
 
     return {
       displayName: name,
       email: email,
       emailVerified: false,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       uid: data!.user!.uid,
     };
   }
@@ -76,7 +78,7 @@ export async function loginUserByEmail(
   }
 }
 
-export async function logout() {
+export async function logout(): void {
   CheckModuleLoad();
   if (fbAppAuth) fbAppAuth.signOut();
 
@@ -84,7 +86,7 @@ export async function logout() {
   // store.commit("Auth/storeFirebaseCurrentUser");
 }
 
-export function hearFirebaseAuthEvent() {
+export function hearFirebaseAuthEvent(): void {
   if (fbAppAuth) {
     // eslint-disable-next-line no-unused-vars
     fbAppAuth.onAuthStateChanged((user) => {

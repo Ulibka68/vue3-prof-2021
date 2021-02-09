@@ -13,7 +13,7 @@ export function loadFirebaseDatabaseAsyncModule(): void {
     "firebase/database"
   ).then(() => {
     if (fbApp) {
-      fbAppDatabaseTs = (fbApp as any).database();
+      fbAppDatabaseTs = (fbApp as unknown).database();
       fbAppDatabaseTsInitialized = true;
       console.log("Firebase Database инициализирован");
     } else {

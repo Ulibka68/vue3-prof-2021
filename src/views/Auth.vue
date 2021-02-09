@@ -30,7 +30,7 @@ import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "@/store";
 import { useLoginForm } from "@/use/login-form";
-import { error } from "@/utils/error";
+import { error, ErrorCodes } from "@/utils/error";
 
 export default defineComponent({
   name: "Auth",
@@ -40,7 +40,7 @@ export default defineComponent({
 
     if (route.query.message) {
       store.dispatch("setMessage", {
-        value: error(route.query.message as any),
+        value: error(route.query.message as ErrorCodes),
         type: "warning",
       });
     }

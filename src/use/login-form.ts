@@ -1,13 +1,30 @@
 import { useField, useForm } from "vee-validate";
 import * as yup from "yup";
-import { computed, watch } from "vue";
+import { computed, ComputedRef, Ref, watch, WritableComputedRef } from "vue";
 import { useStore } from "@/store";
 import { useRouter } from "vue-router";
 
-export function useLoginForm() {
+type SubmitEvent = Event & {
+  target: HTMLFormElement;
+};
+
+type WritableRef<TValue> = Ref<TValue> | WritableComputedRef<TValue>;
+
+export function useLoginForm(): {
+  email: WritableRef<unknown>;
+  password: WritableRef<unknown>;
+  eErorr: ComputedRef<string | undefined>;
+  eBlur: (e?: Event) => void;
+  pError: ComputedRef<string | undefined>;
+  pBlur: (e?: Event) => void;
+  onSubmit: (e?: SubmitEvent) => Promise<void>;
+  isSubmitting: Ref<boolean>;
+  isTooManyAttempts: ComputedRef<boolean>;
+} {
   const { handleSubmit, isSubmitting, submitCount } = useForm<{
     email: string;
   }>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const store = useStore();
   const router = useRouter();
 

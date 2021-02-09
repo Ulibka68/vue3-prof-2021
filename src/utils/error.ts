@@ -4,6 +4,8 @@ const ERROR_CODES = {
   auth: "Пожалуйста войдите в систему",
 };
 
-export function error<K extends keyof typeof ERROR_CODES>(code: K) {
+export type ErrorCodes = keyof typeof ERROR_CODES;
+
+export function error(code: ErrorCodes): string {
   return ERROR_CODES[code] ?? "Неизвестная ошибка";
 }
