@@ -25,6 +25,15 @@ const routesPaths: Array<tMyRouteRecord> = [
       auth: false,
     },
   },
+  {
+    path: "/help",
+    name: "Help",
+    component: () => import("../views/Help.vue"),
+    meta: {
+      layout: "main",
+      auth: true,
+    },
+  },
 ];
 
 const router = createRouter({

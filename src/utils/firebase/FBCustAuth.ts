@@ -56,13 +56,13 @@ export async function loginUserByEmail(
 ): Promise<{ result: boolean; errMsg: string }> {
   try {
     CheckModuleLoad();
-    console.log("loginUserByEmail : ", email, password);
+    // console.log("loginUserByEmail : ", email, password);
     const data: UserCredential = await fbAppAuth.signInWithEmailAndPassword(
       email,
       password
     );
-    console.log("loginUserByEmail end ");
-    console.log(data);
+    // console.log("loginUserByEmail end ");
+    // console.log(data);
 
     if (data.user) {
       return { result: true, errMsg: "" };
@@ -93,9 +93,25 @@ export function hearFirebaseAuthEvent(): void {
   if (fbAppAuth) {
     // eslint-disable-next-line no-unused-vars
     fbAppAuth.onAuthStateChanged((user) => {
-      console.log("onAuthStateChanged fired");
+      console.log("onAuthStateChanged fired", user?.email, user?.displayName);
       store.commit("auth_storeFirebaseCurrentUser");
       if (user) {
+        /*
+          Временная заглушка
+         */
+        if (!user.displayName) {
+          switch (user.email) {
+            case "leha@leha.ru":
+              user.updateProfile({ displayName: "Леха" });
+              break;
+            case "ivan@ivan.ru":
+              user.updateProfile({ displayName: "Иван" });
+              break;
+          }
+        }
+        /*
+          Временная конец
+         */
         router.push({ name: "Home" });
       }
     });
