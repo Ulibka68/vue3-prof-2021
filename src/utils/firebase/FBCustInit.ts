@@ -26,7 +26,8 @@ import(
     /* webpackMode: "lazy" */
     "firebase/auth"
   ).then(() => {
-    fbAppAuth = ((fbApp as unknown).auth() as unknown) as FirebaseAuth;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    fbAppAuth = ((fbApp as any).auth() as unknown) as FirebaseAuth;
     console.log("Система авторизации инициализирована");
 
     store.commit("Auth/storeFirebaseCurrentUser");

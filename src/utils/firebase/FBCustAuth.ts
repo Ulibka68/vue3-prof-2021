@@ -78,7 +78,7 @@ export async function loginUserByEmail(
   }
 }
 
-export async function logout(): void {
+export async function logout(): Promise<void> {
   CheckModuleLoad();
   if (fbAppAuth) fbAppAuth.signOut();
 
