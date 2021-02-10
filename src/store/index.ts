@@ -8,9 +8,9 @@ import {
 
 import { initialState } from "./initialState";
 
-import * as moduleCounter from "./modules/counter";
 import * as moduleAuth from "./modules/auth";
 import * as moduleCommon from "./modules/common";
+import * as moduleProducts from "./modules/products";
 
 export type State = typeof initialState;
 
@@ -22,28 +22,28 @@ if (process.env.NODE_ENV === "development") {
 export const store = createStore({
   state: initialState,
   mutations: {
-    ...moduleCounter.mutations,
     ...moduleAuth.mutations,
     ...moduleCommon.mutations,
+    ...moduleProducts.mutations,
   },
-  getters: { ...moduleCounter.getters, ...moduleAuth.getters },
+  getters: { ...moduleAuth.getters, ...moduleProducts.getters },
   actions: {
-    ...moduleCounter.actions,
     ...moduleAuth.actions,
     ...moduleCommon.actions,
+    ...moduleProducts.actions,
   },
   plugins,
 });
 
-type MutationPayload = moduleCounter.MutationPayload &
-  moduleAuth.MutationPayload &
-  moduleCommon.MutationPayload;
+type MutationPayload = moduleAuth.MutationPayload &
+  moduleCommon.MutationPayload &
+  moduleProducts.MutationPayload;
 
-type ActionsPayload = moduleCounter.ActionsPayload &
-  moduleAuth.ActionsPayload &
-  moduleCommon.ActionsPayload;
+type ActionsPayload = moduleAuth.ActionsPayload &
+  moduleCommon.ActionsPayload &
+  moduleProducts.ActionsPayload;
 
-type Getters = moduleCounter.Getters & moduleAuth.Getters;
+type Getters = moduleAuth.Getters & moduleProducts.Getters;
 
 /*
   ---------------------- no change code ----------------------

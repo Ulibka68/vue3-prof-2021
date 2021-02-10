@@ -8,17 +8,34 @@
 
       <ul class="list">
         <li class="list-item">Все</li>
-        <li class="list-item">Название категории</li>
+        <li class="list-item" v-for="itm in categories" :key="itm">
+          {{ itm }}
+        </li>
       </ul>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed, onMounted } from "vue";
+import { useStore } from "@/store";
 
 export default defineComponent({
   name: "SearchPanel",
+
+  setup() {
+    const store = useStore();
+
+    onMounted(() => {
+      if (store.state.products.categoryList.length === 0) {
+        store.dispatch("products_LoadCategories", null);
+      }
+    });
+
+    return {
+      categories: computed(() => store.getters.products_categoriesGet),
+    };
+  },
 });
 </script>
 

@@ -1,36 +1,34 @@
-import { fbApp } from "./FBCustInit";
+import { fbApp, fbAppNs } from "./FBCustInit";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Database, DataSnapshot } from "@firebase/database-types";
+import { FirebaseFirestore } from "@firebase/firestore-types";
 
 // let fbAppDatabaseTs: Database;
-export let fbAppDatabaseTs: Database;
+export let fbAppDatabaseTs: FirebaseFirestore;
 let fbAppDatabaseTsInitialized = false;
 
-export function loadFirebaseDatabaseAsyncModule(): void {
-  import(
+export async function loadFirebaseDatabaseAsyncModule(): Promise<boolean> {
+  if (fbAppDatabaseTsInitialized) {
+    return true;
+  }
+
+  await import(
     /* webpackChunkName: "firebase-database" */
     /* webpackMode: "lazy" */
-    "firebase/database"
-  ).then(() => {
-    if (fbApp) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      fbAppDatabaseTs = (fbApp as any).database();
-      fbAppDatabaseTsInitialized = true;
-      console.log("Firebase Database инициализирован");
-    } else {
-      //  буду считать что app загружен и инициализирован
-      throw new Error("Firebase fbApp не загружен");
-    }
-  });
-}
-
-export function CheckFirebaseDatabaseLoad(): void {
-  if (!fbAppDatabaseTsInitialized) {
-    loadFirebaseDatabaseAsyncModule();
-    throw new Error("Подождите - идет загрузка модуля авторизации");
+    "firebase/firestore"
+  );
+  if (fbApp) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    fbAppDatabaseTs = (fbAppNs as any).firestore(fbApp);
+    fbAppDatabaseTsInitialized = true;
+    console.log("Firebase Database инициализирован");
+    return true;
+  } else {
+    //  буду считать что app загружен и инициализирован
+    throw new Error("Firebase fbApp не загружен");
   }
 }
 
+/*
 export async function addUser({
   displayName,
   uid,
@@ -41,6 +39,8 @@ export async function addUser({
   CheckFirebaseDatabaseLoad();
   return await fbAppDatabaseTs.ref("users/" + uid).set(displayName);
 }
+
+ */
 
 /*
 export async function NewData(uid, blocks) {

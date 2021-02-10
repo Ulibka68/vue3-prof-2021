@@ -7,6 +7,7 @@ import { FirebaseAuth } from "@firebase/auth-types";
 
 export let fbApp: FirebaseApp;
 export let fbAppAuth: FirebaseAuth;
+export let fbAppNs: FirebaseNamespace;
 export const listenersCallbacks = []; // будут вызываны зарегистрированные слушатели
 
 // в этот модуль включим инициализацию Firebase
@@ -17,7 +18,7 @@ import(
 ).then((fbAppProp) => {
   // блок выполняется один раз
   // инициализация Firebase
-  const fbAppNs: FirebaseNamespace = (fbAppProp.default as unknown) as FirebaseNamespace;
+  fbAppNs = (fbAppProp.default as unknown) as FirebaseNamespace;
 
   fbApp = fbAppNs.initializeApp(firebaseConfig);
 

@@ -7,19 +7,19 @@ import { initialState } from "../initialState";
  */
 
 export type MutationPayload = {
-  counter_setOne: void;
-  counter_setAdd: number;
-  counter_setMulti: { addCnt1: number; addCnt2: number };
+  setOne: void;
+  setAdd: number;
+  setMulti: { addCnt1: number; addCnt2: number };
 };
 
 export const mutations: MutationTree<State> & Mutations = {
-  counter_setOne({ counter }) {
+  setOne({ counter }) {
     counter.counter = 0;
   },
-  counter_setAdd({ counter }, payload) {
+  setAdd({ counter }, payload) {
     counter.counter += payload;
   },
-  counter_setMulti({ counter }, payload) {
+  setMulti({ counter }, payload) {
     counter.counter += payload.addCnt1 + payload.addCnt2;
   },
 };
@@ -42,15 +42,15 @@ type State = typeof initialState;
  */
 
 export type Getters = {
-  counter_doubledCounter(state: State): number;
-  counter_counterGet(state: State): number;
+  doubledCounter(state: State): number;
+  counterGet(state: State): number;
 };
 
 export const getters: GetterTree<State, State> & Getters = {
-  counter_doubledCounter: ({ counter }) => {
+  doubledCounter: ({ counter }) => {
     return counter.counter * 2;
   },
-  counter_counterGet: ({ counter }) => {
+  counterGet: ({ counter }) => {
     return counter.counter;
   },
 };
@@ -60,28 +60,28 @@ export const getters: GetterTree<State, State> & Getters = {
  */
 
 export type ActionsPayload = {
-  counter_setOneA: [payload: void, returnVal: void];
-  counter_setAddA: [payload: number, returnVal: number];
-  counter_setMultiA: [
+  setOneA: [payload: void, returnVal: void];
+  setAddA: [payload: number, returnVal: number];
+  setMultiA: [
     payload: { addCnt1: number; addCnt2: number },
     returnVal: Promise<number>
   ];
 };
 
 export const actions: Actions = {
-  counter_setOneA({ commit }): void {
-    commit("counter_setOne", (null as unknown) as void);
+  setOneA({ commit }): void {
+    commit("setOne", (null as unknown) as void);
   },
-  counter_setAddA({ commit, state }, payload: number): number {
-    commit("counter_setAdd", payload);
+  setAddA({ commit, state }, payload: number): number {
+    commit("setAdd", payload);
     return state.counter.counter;
   },
-  async counter_setMultiA(
+  async setMultiA(
     con: AugmentedActionContext,
     payload: { addCnt1: number; addCnt2: number }
   ): Promise<number> {
     await setTimeout(() => {
-      con.commit("counter_setMulti", payload);
+      con.commit("setMulti", payload);
     }, 2000);
 
     return new Promise<number>(() => 1);

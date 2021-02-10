@@ -31,4 +31,7 @@ export const initialState = {
     value: "",
     type: "primary" as MessageType,
   },
+  products: {
+    categoryList: [] as Array<string>, // перечень категорий
+  },
 };

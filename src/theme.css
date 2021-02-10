@@ -608,6 +608,8 @@ h3 {
     padding: 1rem;
     width: 250px;
     border-right: 1px solid #ccc;
+    overflow: auto;
+    height: calc(100vh - 250px);
 }
 
 .products-table {

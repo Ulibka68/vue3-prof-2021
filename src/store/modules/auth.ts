@@ -5,11 +5,7 @@ import { fbAppAuth } from "@/utils/firebase/FBCustInit";
 import { logout } from "@/utils/firebase/FBCustAuth";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  addUser,
-  fbAppDatabaseTs,
-  CheckFirebaseDatabaseLoad,
-} from "@/utils/firebase/FBCustDatabase.js";
+import { fbAppDatabaseTs } from "@/utils/firebase/FBCustDatabase.js";
 /* eslint-enable */
 
 import { store } from "@/store";
