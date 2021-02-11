@@ -5,15 +5,41 @@ import {
   fbAppDatabaseTs,
   loadFirebaseDatabaseAsyncModule,
 } from "@/utils/firebase/FBCustDatabase";
+import { algoliaIndex, SearchResponse } from "@/utils/algolia";
+import { AlgoliaStore } from "@/store/data-types";
+import { log } from "@/utils/log";
 
 /*
-   ---------------------- Mutations -------------------------------
+   ---------------------- Getters -------------------------------
  */
+
+export type Getters = {
+  doubledCounter(state: State): number;
+  counterGet(state: State): number;
+  products_categoriesGet(state: State): Array<string>;
+  algolia_getProducts(state: State): Array<AlgoliaStore>;
+};
+
+export const getters: GetterTree<State, State> & Getters = {
+  doubledCounter: ({ counter }) => {
+    return counter.counter * 2;
+  },
+  counterGet: ({ counter }) => {
+    return counter.counter;
+  },
+  products_categoriesGet: ({ products }) => products.categoryList,
+  algolia_getProducts: ({ algolia }) => algolia.hits,
+};
+
+/*
+  ---------------------- Mutations -------------------------------
+*/
 
 export type MutationPayload = {
   products_addCategory: string;
   search_setSearchString: string;
   search_clearSearchString: null;
+  algolia_setSearchResult: SearchResponse<AlgoliaStore>;
 };
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -26,26 +52,12 @@ export const mutations: MutationTree<State> & Mutations = {
   search_clearSearchString({ products }) {
     products.searchString = "";
   },
-};
-
-/*
-   ---------------------- Getters -------------------------------
- */
-
-export type Getters = {
-  doubledCounter(state: State): number;
-  counterGet(state: State): number;
-  products_categoriesGet(state: State): Array<string>;
-};
-
-export const getters: GetterTree<State, State> & Getters = {
-  doubledCounter: ({ counter }) => {
-    return counter.counter * 2;
+  algolia_setSearchResult({ algolia }, res) {
+    algolia.nbHits = res.nbHits;
+    algolia.nbPages = res.nbPages;
+    algolia.page = res.page;
+    algolia.hits = [...res.hits];
   },
-  counterGet: ({ counter }) => {
-    return counter.counter;
-  },
-  products_categoriesGet: ({ products }) => products.categoryList,
 };
 
 /*
@@ -54,20 +66,35 @@ export const getters: GetterTree<State, State> & Getters = {
 
 export type ActionsPayload = {
   products_LoadCategories: [payload: null, returnVal: Promise<void>];
+  products_loadSearchGoods: [payload: null, returnVal: Promise<void>];
 };
 
 export const actions: Actions = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async products_LoadCategories({ commit }): Promise<void> {
+  async products_LoadCategories({ commit, state }): Promise<void> {
     await loadFirebaseDatabaseAsyncModule();
     const querySnapshot = await fbAppDatabaseTs.collection("categories").get();
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       const allObjectData = { firebaseID: doc.id, ...doc.data() };
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      commit("products_addCategory", (allObjectData as any).categoryName);
+      // commit("products_addCategory", (allObjectData as any).categoryName);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      state.products.categoryList.push((allObjectData as any).categoryName);
       // console.log(allObjectData);
     });
+  },
+  async products_loadSearchGoods({ state, commit }): Promise<void> {
+    const res = await algoliaIndex.search<AlgoliaStore>("вод", {
+      hitsPerPage: 3,
+      // attributesToRetrieve: "*",
+      // responseFields: "*",
+      // page: 1,
+      facets: ["categoryName"],
+      facetFilters: [["categoryName:Полотенца"]],
+    });
+    commit("algolia_setSearchResult", res);
   },
 };
 

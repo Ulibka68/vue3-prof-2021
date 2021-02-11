@@ -8,6 +8,7 @@ node_modules
 .env.*.local
 fbconf.js
 fbconf.ts
+algoliaConf.ts
 
 # Log files
 npm-debug.log*

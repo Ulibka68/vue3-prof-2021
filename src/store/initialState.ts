@@ -1,3 +1,4 @@
+import { AlgoliaStore } from "./data-types";
 // дополнения к классу alert для AppMessage
 export type MessageType = "warning" | "danger" | "primary";
 
@@ -31,8 +32,15 @@ export const initialState = {
     value: "",
     type: "primary" as MessageType,
   },
+  algolia: {
+    nbHits: 0,
+    nbPages: 0,
+    page: 0,
+    hits: [] as Array<AlgoliaStore>,
+  },
   products: {
     categoryList: [] as Array<string>, // перечень категорий
     searchString: "",
   },
+  backet: [] as Array<{ firebaseID: string; quantity: number }>,
 };
