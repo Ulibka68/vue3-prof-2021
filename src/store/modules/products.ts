@@ -42,9 +42,7 @@ export const getters: GetterTree<State, State> & Getters = {
 
 export type MutationPayload = {
   products_addCategory: string;
-  products_setSelectedCategory: string;
-  search_setSearchString: string;
-  search_clearSearchString: null;
+
   algolia_setSearchResult: SearchResponse<AlgoliaStore>;
 };
 
@@ -52,15 +50,7 @@ export const mutations: MutationTree<State> & Mutations = {
   products_addCategory({ products }, payload) {
     products.categoryList.push(payload);
   },
-  products_setSelectedCategory({ products }, category) {
-    products.selectedCategory = category;
-  },
-  search_setSearchString({ products }, payload) {
-    products.searchString = payload;
-  },
-  search_clearSearchString({ products }) {
-    products.searchString = "";
-  },
+
   algolia_setSearchResult({ algolia }, res) {
     algolia.nbHits = res.nbHits;
     algolia.nbPages = res.nbPages;
@@ -76,6 +66,11 @@ export const mutations: MutationTree<State> & Mutations = {
 export type ActionsPayload = {
   products_LoadCategories: [payload: null, returnVal: Promise<void>];
   products_loadSearchGoods: [payload: null, returnVal: Promise<void>];
+
+  search_setSelectedCategory: [payload: string, returnVal: Promise<void>];
+  search_setSearchString: [payload: string, returnVal: Promise<void>];
+  search_clearSearchString: [payload: null, returnVal: Promise<void>];
+  algolia_setPage: [payload: number, returnVal: Promise<void>];
 };
 
 export const actions: Actions = {
@@ -101,12 +96,33 @@ export const actions: Actions = {
         hitsPerPage: 3,
         // attributesToRetrieve: "*",
         // responseFields: "*",
-        // page: 1,
+        page: state.algolia.page,
         facets: ["categoryName"],
         facetFilters: [[`categoryName:${state.products.selectedCategory}`]],
       }
     );
     commit("algolia_setSearchResult", res);
+  },
+  /*
+   ******************
+   */
+  async search_setSelectedCategory({ state, dispatch }, category) {
+    state.products.selectedCategory = category;
+    state.algolia.page = 0;
+    await dispatch("products_loadSearchGoods", null);
+  },
+  async search_setSearchString({ state, dispatch }, payload) {
+    state.products.searchString = payload;
+    state.algolia.page = 0;
+    await dispatch("products_loadSearchGoods", null);
+  },
+  async search_clearSearchString({ state, dispatch }) {
+    state.products.searchString = "";
+    await dispatch("products_loadSearchGoods", null);
+  },
+  async algolia_setPage({ state, dispatch }, page) {
+    state.algolia.page = page;
+    await dispatch("products_loadSearchGoods", null);
   },
 };
 

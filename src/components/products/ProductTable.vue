@@ -13,23 +13,21 @@
     </div>
     <div class="page-container">
       <span class="page-number"> &lt; </span>
-      <span class="page-number" v-for="itm in paginationArray" :key="itm">{{
-        itm
-      }}</span>
+      <span
+        class="page-number"
+        :class="{ primary: itm == page + 1 }"
+        v-for="itm in paginationArray"
+        :key="itm"
+        @click="handlePageClick(itm)"
+        >{{ itm }}</span
+      >
       <span class="page-number"> &gt; </span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  onMounted,
-  computed,
-  ref,
-  watchEffect,
-  watch,
-} from "vue";
+import { defineComponent, onMounted, computed, ref, watch } from "vue";
 import ProductCard from "@/components/products/ProductCard.vue";
 import { useStore } from "@/store";
 import { log } from "@/utils/log";
@@ -39,75 +37,82 @@ export default defineComponent({
   components: { ProductCard },
   setup() {
     const store = useStore();
-    const parentdiv = ref(null);
+
     onMounted(() => {
       store.dispatch("products_loadSearchGoods", null);
       paginationArray.value = ["1"];
-
-      console.log(paginationArray);
-
-      console.log("parent_div : ", parentdiv.value);
     });
 
-    watchEffect(
-      () => {
-        console.log("parent_div : ", parentdiv.value); // => <div></div>
-      },
-      {
-        flush: "post",
-      }
-    );
     watch(
       () => [
         store.getters.algolia_getPage,
         store.getters.algolia_getPagesCount,
       ],
-      (newValues, prevValues) => {
+      (newValues) => {
         log("algolia changed", "h1");
         console.log(newValues);
-        // formPageNums();
+        formPageNums();
         console.log(paginationArrayLoc);
+        paginationArray.value = paginationArrayLoc;
       }
     );
+
+    const handlePageClick = (page: string) => {
+      if (page == store.getters.algolia_getPage.toString()) return;
+      if (page === "...") return;
+      let p1: number = store.getters.algolia_getPage;
+      if (page === "<") {
+        p1--;
+        if (p1 < 0) return;
+        store.dispatch("algolia_setPage", p1);
+        return;
+      }
+      if (page === ">") {
+        p1++;
+        if (p1 === store.getters.algolia_getPagesCount) return;
+        store.dispatch("algolia_setPage", p1);
+        return;
+      }
+
+      const p: number = parseInt(page) - 1;
+      store.dispatch("algolia_setPage", p);
+    };
 
     const paginationArray = ref<Array<string>>([]);
     let paginationArrayLoc: Array<string>;
 
     const formPageNums = () => {
       paginationArrayLoc = [];
-      log("formPageNums", "h1");
-      console.log(
-        "nnPages,Page ",
-        store.state.algolia.nbPages,
-        store.state.algolia.page
-      );
+
       if (store.state.algolia.nbPages === 0) return;
 
       if (store.state.algolia.nbPages <= 9) {
         console.log("if (store.state.algolia.nbPages <= 9) {");
-        for (let i = 1; i++; i <= store.state.algolia.nbPages) {
+        for (let i = 1; i <= store.state.algolia.nbPages; i++) {
           paginationArrayLoc.push(i.toString());
         }
+        console.log(paginationArrayLoc);
         return;
       }
+
       if (store.state.algolia.page <= 7) {
         // если мы вначале
-        console.log("        // если мы вначале");
-        for (let i = 1; i++; i <= 7) {
+        for (let i = 1; i <= 7; i++) {
           paginationArrayLoc.push(i.toString());
         }
         paginationArrayLoc.push("...");
         paginationArrayLoc.push(store.state.algolia.nbPages.toString());
         return;
       }
+
       if (store.state.algolia.nbPages - store.state.algolia.page < 7) {
         // если мы в конце
         paginationArrayLoc.push("1");
         paginationArrayLoc.push("...");
         for (
           let i = store.state.algolia.nbPages - 7;
-          i++;
-          i <= store.state.algolia.nbPages
+          i <= store.state.algolia.nbPages;
+          i++
         ) {
           paginationArrayLoc.push(i.toString());
         }
@@ -119,8 +124,8 @@ export default defineComponent({
       paginationArrayLoc.push("...");
       for (
         let i = store.state.algolia.page - 2;
-        i++;
-        i <= store.state.algolia.page + 2
+        i <= store.state.algolia.page + 2;
+        i++
       ) {
         paginationArrayLoc.push(i.toString());
       }
@@ -131,7 +136,9 @@ export default defineComponent({
     return {
       nbHits: computed(() => store.state.algolia.nbHits),
       products: computed(() => store.getters.algolia_getProducts),
+      page: computed(() => store.getters.algolia_getPage),
       paginationArray,
+      handlePageClick,
     };
   },
 });

@@ -52,8 +52,7 @@ export default defineComponent({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     watch(searchString, (str, prevStr) => {
       // console.log(prevStr, " -> ", str);
-      store.commit("search_setSearchString", str);
-      store.dispatch("products_loadSearchGoods", null);
+      store.dispatch("search_setSearchString", str);
     });
 
     const clearSearch = () => {
@@ -65,8 +64,7 @@ export default defineComponent({
       let innerText = (e.target as HTMLLIElement).innerText;
       // console.log(a.innerText);
       if (innerText === "Все") innerText = "";
-      store.commit("products_setSelectedCategory", innerText);
-      store.dispatch("products_loadSearchGoods", null);
+      store.dispatch("search_setSelectedCategory", innerText);
     };
 
     return {
