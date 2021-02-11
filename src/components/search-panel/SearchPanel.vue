@@ -11,8 +11,20 @@
       </div>
 
       <ul class="list">
-        <li class="list-item">Все</li>
-        <li class="list-item" v-for="itm in categories" :key="itm">
+        <li
+          class="list-item"
+          :class="{ active: selectedCategory === '' }"
+          @click="handleClick"
+        >
+          Все
+        </li>
+        <li
+          class="list-item"
+          :class="{ active: selectedCategory === itm }"
+          v-for="itm in categories"
+          :key="itm"
+          @click="handleClick"
+        >
           {{ itm }}
         </li>
       </ul>
@@ -41,6 +53,7 @@ export default defineComponent({
     watch(searchString, (str, prevStr) => {
       // console.log(prevStr, " -> ", str);
       store.commit("search_setSearchString", str);
+      store.dispatch("products_loadSearchGoods", null);
     });
 
     const clearSearch = () => {
@@ -48,10 +61,20 @@ export default defineComponent({
       // store.commit("search_clearSearchString", null);
     };
 
+    const handleClick = (e: Event) => {
+      let innerText = (e.target as HTMLLIElement).innerText;
+      // console.log(a.innerText);
+      if (innerText === "Все") innerText = "";
+      store.commit("products_setSelectedCategory", innerText);
+      store.dispatch("products_loadSearchGoods", null);
+    };
+
     return {
       categories: computed(() => store.getters.products_categoriesGet),
+      selectedCategory: computed(() => store.state.products.selectedCategory),
       searchString,
       clearSearch,
+      handleClick,
     };
   },
 });

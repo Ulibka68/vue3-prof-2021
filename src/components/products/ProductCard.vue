@@ -8,7 +8,7 @@
       {{ description }}
     </h5>
     <div class="text-center">
-      <button class="btn">{{ price }}</button>
+      <button class="btn">{{ price }}&nbsp; р.</button>
       <div class="product-controls">
         <button class="btn danger">-</button>
         <strong>123</strong>

@@ -40,6 +40,7 @@ export const initialState = {
   },
   products: {
     categoryList: [] as Array<string>, // перечень категорий
+    selectedCategory: "",
     searchString: "",
   },
   backet: [] as Array<{ firebaseID: string; quantity: number }>,

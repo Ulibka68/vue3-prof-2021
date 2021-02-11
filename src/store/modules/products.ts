@@ -7,6 +7,7 @@ import {
 } from "@/utils/firebase/FBCustDatabase";
 import { algoliaIndex, SearchResponse } from "@/utils/algolia";
 import { AlgoliaStore } from "@/store/data-types";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { log } from "@/utils/log";
 
 /*
@@ -37,6 +38,7 @@ export const getters: GetterTree<State, State> & Getters = {
 
 export type MutationPayload = {
   products_addCategory: string;
+  products_setSelectedCategory: string;
   search_setSearchString: string;
   search_clearSearchString: null;
   algolia_setSearchResult: SearchResponse<AlgoliaStore>;
@@ -45,6 +47,9 @@ export type MutationPayload = {
 export const mutations: MutationTree<State> & Mutations = {
   products_addCategory({ products }, payload) {
     products.categoryList.push(payload);
+  },
+  products_setSelectedCategory({ products }, category) {
+    products.selectedCategory = category;
   },
   search_setSearchString({ products }, payload) {
     products.searchString = payload;
@@ -85,15 +90,18 @@ export const actions: Actions = {
       // console.log(allObjectData);
     });
   },
-  async products_loadSearchGoods({ state, commit }): Promise<void> {
-    const res = await algoliaIndex.search<AlgoliaStore>("вод", {
-      hitsPerPage: 3,
-      // attributesToRetrieve: "*",
-      // responseFields: "*",
-      // page: 1,
-      facets: ["categoryName"],
-      facetFilters: [["categoryName:Полотенца"]],
-    });
+  async products_loadSearchGoods({ commit, state }): Promise<void> {
+    const res = await algoliaIndex.search<AlgoliaStore>(
+      state.products.searchString,
+      {
+        hitsPerPage: 3,
+        // attributesToRetrieve: "*",
+        // responseFields: "*",
+        // page: 1,
+        facets: ["categoryName"],
+        facetFilters: [[`categoryName:${state.products.selectedCategory}`]],
+      }
+    );
     commit("algolia_setSearchResult", res);
   },
 };

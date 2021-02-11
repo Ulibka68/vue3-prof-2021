@@ -1,6 +1,6 @@
 import algoliasearch, { SearchIndex } from "algoliasearch";
 
-export { SearchResponse } from "@algolia/client-search";
+export type { SearchResponse } from "@algolia/client-search";
 
 import { algoliaConfig } from "../../algoliaConf";
 
