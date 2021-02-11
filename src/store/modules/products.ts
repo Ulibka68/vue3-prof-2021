@@ -19,6 +19,8 @@ export type Getters = {
   counterGet(state: State): number;
   products_categoriesGet(state: State): Array<string>;
   algolia_getProducts(state: State): Array<AlgoliaStore>;
+  algolia_getPage(state: State): number;
+  algolia_getPagesCount(state: State): number;
 };
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -30,6 +32,8 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   products_categoriesGet: ({ products }) => products.categoryList,
   algolia_getProducts: ({ algolia }) => algolia.hits,
+  algolia_getPage: ({ algolia }) => algolia.page,
+  algolia_getPagesCount: ({ algolia }) => algolia.nbPages,
 };
 
 /*
