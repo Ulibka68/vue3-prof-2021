@@ -33,5 +33,6 @@ export const initialState = {
   },
   products: {
     categoryList: [] as Array<string>, // перечень категорий
+    searchString: "",
   },
 };

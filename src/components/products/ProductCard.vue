@@ -1,13 +1,14 @@
 <template>
   <div class="product-card">
     <div class="product-img">
-      <img
-        src="https://images.grocery.yandex.net/2756334/33a66b51989449f9918122a775885fbc/300x300.png"
-      />
+      <img :src="imageUrl" />
     </div>
-    <h4 class="product-title">Название товара</h4>
+    <h4 class="product-title">{{ goodName }}</h4>
+    <h5 class="product-title">
+      {{ description }}
+    </h5>
     <div class="text-center">
-      <button class="btn">23</button>
+      <button class="btn">{{ price }}</button>
       <div class="product-controls">
         <button class="btn danger">-</button>
         <strong>123</strong>
@@ -22,6 +23,12 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "ProductCard",
+  props: {
+    imageUrl: { type: String, default: "/empty_photo.jpg" },
+    description: String,
+    goodName: String,
+    price: Number,
+  },
 });
 </script>
 

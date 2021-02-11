@@ -2,8 +2,12 @@
   <div class="good-layout-search good-layout-items">
     <div class="products-filter">
       <div class="form-control">
-        <input type="text" placeholder="Найти товар..." />
-        <span class="form-control-clear">&times;</span>
+        <input
+          type="text"
+          placeholder="Найти товар..."
+          v-model="searchString"
+        />
+        <span class="form-control-clear" @click="clearSearch">&times;</span>
       </div>
 
       <ul class="list">
@@ -17,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted } from "vue";
+import { defineComponent, computed, onMounted, ref, watch } from "vue";
 import { useStore } from "@/store";
 
 export default defineComponent({
@@ -25,6 +29,7 @@ export default defineComponent({
 
   setup() {
     const store = useStore();
+    const searchString = ref<string>("");
 
     onMounted(() => {
       if (store.state.products.categoryList.length === 0) {
@@ -32,8 +37,21 @@ export default defineComponent({
       }
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    watch(searchString, (str, prevStr) => {
+      // console.log(prevStr, " -> ", str);
+      store.commit("search_setSearchString", str);
+    });
+
+    const clearSearch = () => {
+      searchString.value = "";
+      // store.commit("search_clearSearchString", null);
+    };
+
     return {
       categories: computed(() => store.getters.products_categoriesGet),
+      searchString,
+      clearSearch,
     };
   },
 });

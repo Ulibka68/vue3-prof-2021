@@ -12,11 +12,19 @@ import {
 
 export type MutationPayload = {
   products_addCategory: string;
+  search_setSearchString: string;
+  search_clearSearchString: null;
 };
 
 export const mutations: MutationTree<State> & Mutations = {
   products_addCategory({ products }, payload) {
     products.categoryList.push(payload);
+  },
+  search_setSearchString({ products }, payload) {
+    products.searchString = payload;
+  },
+  search_clearSearchString({ products }) {
+    products.searchString = "";
   },
 };
 
@@ -56,6 +64,7 @@ export const actions: Actions = {
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       const allObjectData = { firebaseID: doc.id, ...doc.data() };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       commit("products_addCategory", (allObjectData as any).categoryName);
       // console.log(allObjectData);
     });
