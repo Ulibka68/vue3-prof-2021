@@ -5,10 +5,10 @@
     >
   </div>
   <div class="card">
-    <h1 class="card-title">
-      {{ title }}
+    <div class="card-title left">
+      <h1>{{ title }}</h1>
       <slot name="header" />
-    </h1>
+    </div>
     <slot></slot>
   </div>
 </template>

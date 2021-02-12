@@ -21,6 +21,7 @@ export type Getters = {
   algolia_getProducts(state: State): Array<AlgoliaStore>;
   algolia_getPage(state: State): number;
   algolia_getPagesCount(state: State): number;
+  algolia_getNbHits(state: State): number;
 };
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -34,6 +35,7 @@ export const getters: GetterTree<State, State> & Getters = {
   algolia_getProducts: ({ algolia }) => algolia.hits,
   algolia_getPage: ({ algolia }) => algolia.page,
   algolia_getPagesCount: ({ algolia }) => algolia.nbPages,
+  algolia_getNbHits: ({ algolia }) => algolia.nbHits,
 };
 
 /*
@@ -94,7 +96,7 @@ export const actions: Actions = {
     const res = await algoliaIndex.search<AlgoliaStore>(
       state.products.searchString,
       {
-        hitsPerPage: 6,
+        hitsPerPage: state.algolia.hitsPerPage,
         attributesToRetrieve: ["*"],
 
         page: state.algolia.page,

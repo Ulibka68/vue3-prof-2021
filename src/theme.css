@@ -435,6 +435,10 @@ h3 {
     align-items: center;
 }
 
+.card-title.left {
+    justify-content: flex-start;
+}
+
 .badge {
     font-size: 0.8rem;
     border: 1px solid #eee;
@@ -497,6 +501,12 @@ h3 {
 
 .breadcrumbs {
     margin-bottom: .5rem;
+}
+
+.filter-current-category {
+    font-size: 1.4rem;
+    font-weight: normal;
+    margin-left: 20px;
 }
 
 .filter {

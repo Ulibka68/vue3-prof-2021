@@ -1,6 +1,9 @@
 <template>
   <AppLoader v-if="loading" />
-  <AppPage v-else title="Список заявок">
+  <AppPage v-else title="Список товаров">
+    <template v-slot:header>
+      <div class="filter-current-category">фильтр :{{ selectedCategory }}</div>
+    </template>
     <div class="good-layout-container">
       <SearchPanel />
       <ProductTable />
@@ -47,6 +50,7 @@ export default defineComponent({
 
     return {
       modal,
+      selectedCategory: computed(() => store.state.products.selectedCategory),
 
       loading,
     };

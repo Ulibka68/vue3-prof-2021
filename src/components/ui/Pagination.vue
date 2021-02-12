@@ -26,13 +26,8 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  onBeforeMount,
-  onBeforeUpdate,
-  onUpdated,
-} from "vue";
+import { defineComponent, ref, onBeforeMount, onBeforeUpdate } from "vue";
+import { log } from "@/utils/log";
 
 export default defineComponent({
   name: "Pagination",
@@ -44,13 +39,22 @@ export default defineComponent({
   },
   emits: ["update:currentPage"],
   setup(props, context) {
-    // context.emit
-    // context.attrs
-    // context.slots
-
     const locPagesCount = ref(0);
 
-    onBeforeMount(() => {
+    const paginationInfo = () => {
+      /*
+      log("Pagination", "h2");
+      console.log(
+        "Pagination currentPage :",
+        props.currentPage,
+        " itemsCount : ",
+        props.itemsCount,
+        " itemsPerPage : ",
+        props.itemsPerPage
+      );
+
+       */
+
       if (props.pagesCount === 0) {
         locPagesCount.value = Math.ceil(props.itemsCount / props.itemsPerPage);
       } else {
@@ -58,7 +62,10 @@ export default defineComponent({
       }
 
       formPageNums(props.currentPage);
-    });
+    };
+
+    onBeforeMount(paginationInfo);
+    onBeforeUpdate(paginationInfo);
 
     const sendNewPage = (p: number) => {
       // if (!paginationArrayLoc.includes((p + 1).toString())) {
