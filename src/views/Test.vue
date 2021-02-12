@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <h1>Test</h1>
-    <Pagination v-model:current-page="curPage" :pages-count="numPages" />
+    <Pagination v-model:current-page="curPage" :items-count="40" />
   </div>
 </template>
 

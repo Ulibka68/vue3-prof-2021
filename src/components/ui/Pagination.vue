@@ -38,20 +38,27 @@ export default defineComponent({
   name: "Pagination",
   props: {
     currentPage: { type: Number, required: true },
-    pagesCount: { type: Number, required: true },
+    pagesCount: { type: Number, required: false, default: 0 },
+    itemsCount: { type: Number, required: false, default: 0 },
+    itemsPerPage: { type: Number, required: false, default: 6 },
   },
   emits: ["update:currentPage"],
   setup(props, context) {
     // context.emit
     // context.attrs
     // context.slots
+
+    const locPagesCount = ref(0);
+
     onBeforeMount(() => {
+      if (props.pagesCount === 0) {
+        locPagesCount.value = Math.ceil(props.itemsCount / props.itemsPerPage);
+      } else {
+        locPagesCount.value = props.pagesCount;
+      }
+
       formPageNums(props.currentPage);
     });
-
-    // onUpdated(() => {
-    //   formPageNums();
-    // });
 
     const sendNewPage = (p: number) => {
       // if (!paginationArrayLoc.includes((p + 1).toString())) {
@@ -74,7 +81,7 @@ export default defineComponent({
       }
       if (page === ">") {
         p1++;
-        if (p1 === props.pagesCount) return;
+        if (p1 === locPagesCount.value) return;
         sendNewPage(p1);
         // store.dispatch("algolia_setPage", p1);
         return;
@@ -93,10 +100,10 @@ export default defineComponent({
       console.log(" call  formPageNums ", props.currentPage);
       paginationArrayLoc = [];
 
-      if (props.pagesCount === 0) return;
+      if (locPagesCount.value === 0) return;
 
-      if (props.pagesCount <= 9) {
-        for (let i = 1; i <= props.pagesCount; i++) {
+      if (locPagesCount.value <= 9) {
+        for (let i = 1; i <= locPagesCount.value; i++) {
           paginationArrayLoc.push(i.toString());
         }
         paginationArray.value = paginationArrayLoc;
@@ -109,16 +116,16 @@ export default defineComponent({
           paginationArrayLoc.push(i.toString());
         }
         paginationArrayLoc.push("...");
-        paginationArrayLoc.push(props.pagesCount.toString());
+        paginationArrayLoc.push(locPagesCount.value.toString());
         paginationArray.value = paginationArrayLoc;
         return;
       }
 
-      if (props.pagesCount - curPage < 7) {
+      if (locPagesCount.value - curPage < 7) {
         // если мы в конце
         paginationArrayLoc.push("1");
         paginationArrayLoc.push("...");
-        for (let i = props.pagesCount - 7; i <= props.pagesCount; i++) {
+        for (let i = locPagesCount.value - 7; i <= locPagesCount.value; i++) {
           paginationArrayLoc.push(i.toString());
         }
         paginationArray.value = paginationArrayLoc;
@@ -132,7 +139,7 @@ export default defineComponent({
         paginationArrayLoc.push(i.toString());
       }
       paginationArrayLoc.push("...");
-      paginationArrayLoc.push(props.pagesCount.toString());
+      paginationArrayLoc.push(locPagesCount.value.toString());
       paginationArray.value = paginationArrayLoc;
     };
 
