@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 // import About from "@/views/About.vue";
 import Home from "@/views/Home.vue";
 import Auth from "@/views/Auth.vue";
+import Test from "@/views/Test.vue";
 
 export type layoutType = {
   layout: "main-layout" | "auth-layout" | "GoodsListLayout";
@@ -14,6 +15,15 @@ const routesPaths: Array<tMyRouteRecord> = [
     path: "/",
     name: "Home",
     component: Home,
+    meta: {
+      layout: "main-layout",
+      auth: false,
+    },
+  },
+  {
+    path: "/test",
+    name: "Test",
+    component: Test,
     meta: {
       layout: "main-layout",
       auth: false,

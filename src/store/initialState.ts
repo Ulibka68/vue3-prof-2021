@@ -36,6 +36,7 @@ export const initialState = {
     nbHits: 0,
     nbPages: 0,
     page: 0,
+    hitsPerPage_result: 0,
     hits: [] as Array<AlgoliaStore>,
   },
   products: {

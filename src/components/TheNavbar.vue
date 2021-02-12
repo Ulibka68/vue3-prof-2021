@@ -4,6 +4,7 @@
     <h3>{{ userName }}</h3>
     <ul class="navbar-menu">
       <li><router-link to="/">Заявки</router-link></li>
+      <li><router-link to="/test">Test</router-link></li>
       <li><router-link to="/help">Помощь</router-link></li>
       <li><a href="#" @click.prevent="openSidebar">Сообщения</a></li>
       <li><a href="#" @click.prevent="logout">Выход</a></li>

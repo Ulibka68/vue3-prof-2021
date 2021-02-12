@@ -56,6 +56,7 @@ export const mutations: MutationTree<State> & Mutations = {
     algolia.nbPages = res.nbPages;
     algolia.page = res.page;
     algolia.hits = [...res.hits];
+    algolia.hitsPerPage_result = res.hitsPerPage;
   },
 };
 
@@ -93,12 +94,17 @@ export const actions: Actions = {
     const res = await algoliaIndex.search<AlgoliaStore>(
       state.products.searchString,
       {
-        hitsPerPage: 3,
-        // attributesToRetrieve: "*",
-        // responseFields: "*",
+        hitsPerPage: 6,
+        attributesToRetrieve: ["*"],
+
         page: state.algolia.page,
         facets: ["categoryName"],
         facetFilters: [[`categoryName:${state.products.selectedCategory}`]],
+        getRankingInfo: true,
+        analytics: false,
+        attributesToSnippet: ["*:20"],
+        responseFields: ["*"],
+        maxValuesPerFacet: 100,
       }
     );
     commit("algolia_setSearchResult", res);
