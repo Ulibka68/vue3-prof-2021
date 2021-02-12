@@ -18,7 +18,7 @@ export default defineComponent({
     };
 
     const curPage = ref(0);
-    watch(curPage, (value, oldValue) => {
+    watch(curPage, (value) => {
       console.log("watch on parent ", value);
     });
 

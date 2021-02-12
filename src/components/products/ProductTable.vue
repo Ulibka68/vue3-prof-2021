@@ -23,7 +23,6 @@
 import { defineComponent, onMounted, computed, ref, watch } from "vue";
 import ProductCard from "@/components/products/ProductCard.vue";
 import { useStore } from "@/store";
-import { log } from "@/utils/log";
 import Pagination from "@/components/ui/Pagination.vue";
 
 export default defineComponent({
@@ -54,7 +53,7 @@ export default defineComponent({
 
      */
 
-    watch(curPage, (page, oldValue) => {
+    watch(curPage, (page) => {
       console.log("watch on ProductTable ", page);
       if (page == store.getters.algolia_getPage) return;
       store.dispatch("algolia_setPage", page);

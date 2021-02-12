@@ -27,6 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onBeforeMount, onBeforeUpdate } from "vue";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { log } from "@/utils/log";
 
 export default defineComponent({
