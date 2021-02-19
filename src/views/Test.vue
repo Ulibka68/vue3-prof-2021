@@ -1,6 +1,7 @@
 <template>
   <div class="card">
     <h1>Test</h1>
+    <button class="btn" @click="AddQuantityField()">AddQuantityField</button>
     <Pagination v-model:current-page="curPage" :items-count="40" />
   </div>
 </template>
@@ -8,6 +9,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
 import Pagination from "@/components/ui/Pagination.vue";
+import { AddQuantityField } from "@/utils/firebase/addNewField";
 
 export default defineComponent({
   name: "Test",
@@ -27,6 +29,7 @@ export default defineComponent({
       eventChild: "pagination:setpage",
       curPage,
       numPages: 20,
+      AddQuantityField,
     };
   },
 });

@@ -8,8 +8,10 @@
       {{ description }}
     </h5>
     <div class="text-center">
-      <button class="btn">{{ price }}&nbsp; р.</button>
-      <div class="product-controls">
+      <button class="btn" v-if="mode === 'display'" @click="mode = 'basket'">
+        {{ price }}&nbsp; р.
+      </button>
+      <div class="product-controls" v-else>
         <button class="btn danger">-</button>
         <strong>123</strong>
         <button class="btn primary">+</button>
@@ -19,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   name: "ProductCard",
@@ -28,6 +30,14 @@ export default defineComponent({
     description: String,
     goodName: String,
     price: Number,
+    quantity: Number,
+    sold: Boolean,
+  },
+  setup() {
+    const mode = ref("display");
+    return {
+      mode,
+    };
   },
 });
 </script>
