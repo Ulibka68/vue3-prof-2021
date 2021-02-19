@@ -1,52 +1,57 @@
 <template>
   <form class="card" @submit.prevent="onSubmit">
     <h1>Войти в систему</h1>
-    <div class="form-control" :class="{ invalid: eErorr }">
+
+    <div :class="['form-control', {invalid: eError}]">
       <label for="email">Email</label>
-      <input type="email" id="email" v-model="email" @blur="eBlur" />
-      <small v-if="eErorr">{{ eErorr }}</small>
+      <input type="email" id="email" v-model="email" @blur="eBlur">
+      <small v-if="eError">{{ eError }}</small>
     </div>
 
-    <div class="form-control" :class="{ invalid: pError }">
+    <div :class="['form-control', {invalid: pError}]">
       <label for="password">Пароль</label>
-      <input type="password" id="password" v-model="password" @blur="pBlur" />
+      <input type="password" id="password" v-model="password" @blur="pBlur">
       <small v-if="pError">{{ pError }}</small>
     </div>
-    <button
-      class="btn primary"
-      type="submit"
-      :disabled="isSubmitting || isTooManyAttempts"
-    >
-      Войти
-    </button>
+
+    <button class="btn primary" type="submit" :disabled="isSubmitting || isTooManyAttempts">Войти</button>
     <div class="text-danger" v-if="isTooManyAttempts">
-      Вы слишком часто пытаетесь войти в систему, попробуйте позже
+      Вы слишком часто пытаетесь войти в систему. Попробуйте позже
     </div>
   </form>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import { useRoute } from "vue-router";
-import { useStore } from "@/store";
-import { useLoginForm } from "@/use/login-form";
-import { error, ErrorCodes } from "@/utils/error";
+<script>
+import {useRoute} from 'vue-router'
+import {useStore} from 'vuex'
+import {watch, reactive} from 'vue'
+import {error} from '../utils/error'
+import {useLoginForm} from '../use/login-form'
 
-export default defineComponent({
-  name: "Auth",
+export default {
   setup() {
-    const route = useRoute();
-    const store = useStore();
+    const route = useRoute()
+    const store = useStore()
+    const state = reactive(route)
 
-    if (route.query.message) {
-      store.dispatch("setMessage", {
-        value: error(route.query.message as ErrorCodes),
-        type: "warning",
-      });
+    const setMessage = r => {
+      if (r.query.message) {
+        store.commit('setMessage', {
+          value: error(route.query.message),
+          type: 'warning'
+        })
+      }
     }
-    return { ...useLoginForm() };
-  },
-});
+
+    watch(state, setMessage)
+
+    setMessage(route)
+
+    return {...useLoginForm()}
+  }
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

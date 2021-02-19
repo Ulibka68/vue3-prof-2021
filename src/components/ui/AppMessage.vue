@@ -1,39 +1,36 @@
 <template>
-  <div v-if="message.value" :class="['alert', message.type]">
-    <p class="alert-title" v-if="title">{{ title }}</p>
-    <p>
-      {{ message.value }}
-    </p>
+  <div v-if="message" :class="['alert', message.type]">
+    <p class="alert-title" v-if="title">{{title}}</p>
+    <p>{{message.value}}</p>
     <span class="alert-close" @click="close">&times;</span>
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, Ref } from "vue";
-import { useStore } from "@/store";
-import { initialState, MESSAGE_TITLE_MAP } from "@/store/initialState";
+<script>
+import {computed} from 'vue'
+import {useStore} from 'vuex'
 
-export default defineComponent({
-  name: "AppMessage",
+export default {
   setup() {
-    const store = useStore();
-    const message: Ref<typeof initialState.message | null> = computed(
-      () => store.state.message
-    );
+    const store = useStore()
+    const TITLE_MAP = {
+      primary: 'Успешно!',
+      danger: 'Ошибка!',
+      warning: 'Внимание!'
+    }
 
-    const title = computed(<K extends keyof typeof MESSAGE_TITLE_MAP>() =>
-      message.value ? MESSAGE_TITLE_MAP[message.value.type as K] : null
-    );
+    const message = computed(() => store.state.message)
+    const title = computed(() => message.value ? TITLE_MAP[message.value.type] : null)
 
     return {
       message,
       title,
-      close: () => {
-        store.commit("message_clearMessage", null);
-      },
-    };
-  },
-});
+      close: () => store.commit('clearMessage')
+    }
+  }
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

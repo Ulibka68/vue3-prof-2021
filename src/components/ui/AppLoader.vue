@@ -2,12 +2,12 @@
   <div class="loader"></div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script>
+  export default {
 
-export default defineComponent({
-  name: "AppLoader",
-});
+  }
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

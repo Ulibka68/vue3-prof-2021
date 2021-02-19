@@ -1,31 +1,41 @@
 <template>
   <div class="breadcrumbs" v-if="back">
-    <router-link to="/" class="text-white"
-      >Вернуться к списку заявок</router-link
-    >
+    <router-link to="/" class="text-white">Вернуться к товарам</router-link>
   </div>
-  <div class="card">
-    <div class="card-title left">
-      <h1>{{ title }}</h1>
+  <div :class="['card', {center}]">
+    <h1 class="card-title">
+      <span v-once>{{title}}</span>
       <slot name="header" />
-    </div>
-    <slot></slot>
+    </h1>
+
+    <slot />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "AppPage",
+<script>
+export default {
   props: {
-    title: { type: String, required: true },
-    back: { type: Boolean, default: false },
+    title: {
+      type: String,
+      required: true
+    },
+    back: {
+      type: Boolean,
+      default: false
+    },
+    center: {
+      type: Boolean,
+      default: false
+    }
   },
   setup(props) {
-    document.title = `${props.title} | Магазин продуктов`;
-  },
-});
+    if (props.title) {
+      document.title = `${props.title} | Vue Лавка`
+    }
+  }
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

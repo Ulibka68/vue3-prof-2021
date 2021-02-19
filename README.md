@@ -1,10 +1,19 @@
-# vue3-prof-2021
-Курс 2021-02 профессия VUE 3 Владилен
+# vue-practice-app
 
-для входа в приложение используйте :
-login: ivan@ivan.ru
-password: 1234567
+## Project setup
+```
+npm install
+```
 
-Для запуска проекта создайте файлы:
-fbconf.ts
-algoliaConf.ts
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

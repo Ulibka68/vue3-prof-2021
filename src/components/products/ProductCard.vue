@@ -1,35 +1,29 @@
 <template>
-  <div class="product-card">
+  <div class="product-card" @click="$router.push('/product/' + product.id)">
     <div class="product-img">
-      <img :src="imageUrl" />
+      <img :src="product.img" :alt="product.title">
     </div>
-    <h4 class="product-title">{{ goodName }}</h4>
-    <h5 class="product-title">
-      {{ description }}
-    </h5>
+    <h4 class="product-title">{{product.title}}</h4>
     <div class="text-center">
-      <button class="btn">{{ price }}&nbsp; р.</button>
-      <div class="product-controls">
-        <button class="btn danger">-</button>
-        <strong>123</strong>
-        <button class="btn primary">+</button>
-      </div>
+      <template v-if="product.count">
+        <ProductCartActions :product="product" />
+      </template>
+      <p v-else>
+        <strong>Нет в наличии</strong>
+      </p>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script>
+import ProductCartActions from './ProductCartActions'
 
-export default defineComponent({
-  name: "ProductCard",
-  props: {
-    imageUrl: { type: String, default: "/empty_photo.jpg" },
-    description: String,
-    goodName: String,
-    price: Number,
-  },
-});
+export default {
+  props: ['product'],
+  components: {ProductCartActions}
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

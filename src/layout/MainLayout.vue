@@ -1,22 +1,20 @@
 <template>
-  <the-navbar></the-navbar>
-  <TheSidebar />
+  <the-navbar />
   <div class="container with-nav">
-    <AppMessage />
-    <router-view></router-view>
+    <app-message />
+    <router-view />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import TheNavbar from "@/components/TheNavbar.vue";
-import AppMessage from "@/components/ui/AppMessage.vue";
-import TheSidebar from "@/components/TheSidebar.vue";
+<script>
+import TheNavbar from '../components/TheNavbar'
+import AppMessage from '../components/ui/AppMessage'
 
-export default defineComponent({
-  name: "MainLayout",
-  components: { TheSidebar, TheNavbar, AppMessage },
-});
+export default {
+  components: {TheNavbar, AppMessage}
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>
